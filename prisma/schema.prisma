@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model FavoriteWord {
+  created_at DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  word       String
+}
