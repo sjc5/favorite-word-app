@@ -1,9 +1,9 @@
 import type { DataFunctionArgs } from "@remix-run/node"
-import { data_function_helper, useAction } from "remix-easy-mode"
+import { dataFunctionHelper, useAction } from "remix-easy-mode"
 import { z } from "zod"
 import { prisma } from "~/server/prisma.server"
 
-const input_schema = z.object({
+const schema = z.object({
   word: z
     .string()
     .trim()
@@ -15,11 +15,11 @@ const input_schema = z.object({
 })
 
 export const action = (ctx: DataFunctionArgs) => {
-  return data_function_helper({
+  return dataFunctionHelper({
     ctx,
-    input_schema,
+    schema,
     bouncer: null,
-    callback: async ({ input }) => {
+    fn: async ({ input }) => {
       return await prisma.favoriteWord.create({
         data: input,
       })
@@ -28,10 +28,10 @@ export const action = (ctx: DataFunctionArgs) => {
 }
 
 export const useSaveFavoriteWord = () => {
-  return useAction<typeof action, typeof input_schema>({
-    input_schema,
+  return useAction<typeof action, typeof schema>({
+    schema,
     path: "/api/favorite-word",
-    on_success: (res) => {
+    onSuccess: (res) => {
       console.log(res)
     },
   })

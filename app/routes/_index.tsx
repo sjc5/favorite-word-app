@@ -1,25 +1,21 @@
 import type { V2_MetaFunction } from "@remix-run/react"
 import { useSaveFavoriteWord } from "./api.favorite-word"
-import { FormHelper, InputHelper } from "remix-easy-mode"
+import { InputHelper } from "remix-easy-mode"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Favorite word app" }]
 }
 
 export default function Index() {
-  const { form_props, run, result } = useSaveFavoriteWord()
+  const { Form, mutate, result, fields } = useSaveFavoriteWord()
 
   return (
     <div>
-      <FormHelper form_props={form_props} on_submit={run}>
-        <InputHelper
-          form_props={form_props}
-          label="Favorite word"
-          name="word"
-        />
-
+      <Form onSubmit={mutate}>
+        <InputHelper {...fields.word.inputProps} />
+        <pre>{JSON.stringify(fields.word.errors, null, 2)}</pre>
         <button type="submit">Save</button>
-      </FormHelper>
+      </Form>
 
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
